@@ -1,0 +1,5 @@
+product_id,product_name,category,base_cost,competitor_price,historical_sales,margin_target,date
+P001,Industrial Pump A,Equipment,1240,1399,87,0.28,2025-01-15
+P002,Valve Assembly,Parts,89,105,234,0.35,2025-01-15
+P003,Control Panel,Electronics,675,799,45,0.22,2025-02-01
+P004,Filter Kit,Maintenance,45,52,312,0.40,2025-02-01
