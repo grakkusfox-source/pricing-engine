@@ -8,7 +8,7 @@ st.set_page_config(page_title="Industrial Supplier Pricing", layout="wide")
 st.title("🚀 Industrial Supplier Pricing Engine")
 st.markdown("**Personal AI Portfolio Project 1**")
 
-# Download template button (always visible)
+# ====================== DOWNLOAD TEMPLATE ======================
 st.download_button(
     label="📥 Download Sample Pricing Template",
     data=pd.read_csv("data/sample_pricing.csv").to_csv(index=False),
@@ -37,7 +37,7 @@ with col2:
                      title="Cost vs Competitor Price")
     st.plotly_chart(fig2, use_container_width=True)
 
-# AI Section
+# AI Recommendations
 st.subheader("Ask AI for Pricing Recommendations")
 question = st.text_area(
     "Your request to the AI:",
@@ -46,7 +46,7 @@ question = st.text_area(
 )
 
 if st.button("Get AI Recommendations", type="primary"):
-    with st.spinner("AI is analyzing..."):
+    with st.spinner("AI is thinking..."):
         response = get_pricing_recommendation(question)
         st.success("✅ AI Recommendation")
         st.markdown(response)
