@@ -1,5 +1,5 @@
 ### AI Pricing Recommendation Engine
-**Personal AI Portfolio Project 1**
+# Industrial Supplier Pricing Engine
 
 **Overview**  
 Built a full-stack AI application that analyzes historical pricing and sales data to generate intelligent, dynamic pricing recommendations. The tool supports CSV uploads, interactive visualizations, and provides clear business reasoning.
