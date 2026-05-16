@@ -4,9 +4,9 @@ import plotly.express as px
 from agent import get_pricing_recommendation
 from datetime import datetime
 
-st.set_page_config(page_title="AI Pricing Engine", layout="wide")
-st.title("🚀 AI Pricing Recommendation Engine")
-st.markdown("**Industrial Supplier Pricing**")
+st.set_page_config(page_title="Industrial Supplier Pricing", layout="wide")
+st.title("🚀 Industrial Supplier Pricing Engine")
+st.markdown("**Industrial Supplier Pricing Engine**")
 
 # File uploader
 uploaded_file = st.file_uploader("Upload your pricing data (CSV)", type=["csv"])
@@ -40,15 +40,38 @@ question = st.text_area(
 if st.button("Get AI Recommendations", type="primary"):
     with st.spinner("AI is thinking..."):
         response = get_pricing_recommendation(question)
+        
         st.success("✅ AI Recommendation")
         st.markdown(response)
+
+        # === Create Downloadable CSV ===
+        # Parse the AI response into structured data
+        lines = response.split('\n')
+        recommendations = []
         
-        # Create downloadable CSV
+        for line in lines:
+            if any(keyword in line.lower() for keyword in ["price", "suggest", "$"]):
+                recommendations.append({
+                    "Product": "Extracted from AI",
+                    "Recommended_Price": "See AI response",
+                    "Suggested_Margin": "See AI response",
+                    "Reasoning": line.strip(),
+                    "Date": datetime.now().strftime("%m/%d/%Y")
+                })
+
+        if recommendations:
+            download_df = pd.DataFrame(recommendations)
+        else:
+            download_df = pd.DataFrame([{"Note": "See full AI recommendation above", "Date": datetime.now().strftime("%m/%d/%Y")}])
+
+        csv = download_df.to_csv(index=False)
+
         st.download_button(
             label="📥 Download Recommendations as CSV",
-            data=response,  # For now it's text - we can improve this later
-            file_name=f"pricing_recommendations_{datetime.now().strftime('%Y%m%d')}.txt",
-            mime="text/plain"
+            data=csv,
+            file_name=f"pricing_recommendations_{datetime.now().strftime('%Y%m%d_%H%M')}.csv",
+            mime="text/csv",
+            type="primary"
         )
 
-st.caption("Built locally with Qwen2.5 14B • Cloud version with Groq")
+st.caption("Built with Qwen2.5 14B (local) + Groq (cloud) • Industrial Supplier Pricing Tool")
