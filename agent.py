@@ -1,21 +1,21 @@
+import os
+import pandas as pd
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-import pandas as pd
-import os
 
-# === Detect if running on Streamlit Cloud ===
+# ================== ENVIRONMENT DETECTION ==================
 IS_CLOUD = os.getenv("STREAMLIT_SHARING_MODE") is not None
 
 if IS_CLOUD:
-    # Use Groq on Cloud
+    # === Running on Streamlit Cloud ===
     from langchain_groq import ChatGroq
     llm = ChatGroq(
-        model="llama3-70b-8192",   # Fast and strong
+        model="llama3-70b-8192",      # Strong and fast
         temperature=0.3,
         api_key=os.getenv("GROQ_API_KEY")
     )
 else:
-    # Use local Ollama on your Mac
+    # === Running locally on your Mac ===
     from langchain_ollama import ChatOllama
     llm = ChatOllama(
         model="qwen2.5:14b",
@@ -23,13 +23,14 @@ else:
         num_ctx=4096
     )
 
-# Simple data loader (no vector DB needed on cloud)
+# Load data (simple version - works everywhere)
 def load_pricing_data():
     df = pd.read_csv("data/sample_pricing.csv")
     return df
 
 pricing_df = load_pricing_data()
 
+# Prompt
 prompt = ChatPromptTemplate.from_template("""
 You are an expert pricing strategist for an industrial supplier.
 
