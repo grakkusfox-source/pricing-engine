@@ -3,21 +3,27 @@ from langchain_core.output_parsers import StrOutputParser
 import pandas as pd
 import os
 
-# Cloud vs Local detection
-if os.getenv("STREAMLIT_SHARING_MODE"):
-    # Running on Streamlit Cloud → Use Groq (fast & free tier available)
+# === Detect if running on Streamlit Cloud ===
+IS_CLOUD = os.getenv("STREAMLIT_SHARING_MODE") is not None
+
+if IS_CLOUD:
+    # Use Groq on Cloud
     from langchain_groq import ChatGroq
     llm = ChatGroq(
-        model="llama3-70b-8192",      # Very good and fast
+        model="llama3-70b-8192",   # Fast and strong
         temperature=0.3,
         api_key=os.getenv("GROQ_API_KEY")
     )
 else:
-    # Running locally on your Mac
+    # Use local Ollama on your Mac
     from langchain_ollama import ChatOllama
-    llm = ChatOllama(model="qwen2.5:14b", temperature=0.3, num_ctx=4096)
+    llm = ChatOllama(
+        model="qwen2.5:14b",
+        temperature=0.3,
+        num_ctx=4096
+    )
 
-# Simple in-memory data (no Chroma on cloud)
+# Simple data loader (no vector DB needed on cloud)
 def load_pricing_data():
     df = pd.read_csv("data/sample_pricing.csv")
     return df
@@ -25,24 +31,22 @@ def load_pricing_data():
 pricing_df = load_pricing_data()
 
 prompt = ChatPromptTemplate.from_template("""
-You are an expert pricing strategist.
+You are an expert pricing strategist for an industrial supplier.
 
-Use the following product data:
-
+Product Data:
 {context}
 
 User Request: {question}
 
-Give clear recommendations:
+Give clear, professional recommendations with:
 1. Suggested new price for each product
 2. Expected margin improvement
 3. Reasoning (cost, competition, demand)
-4. Confidence level
+4. Confidence level (High / Medium / Low)
 """)
 
 chain = prompt | llm | StrOutputParser()
 
 def get_pricing_recommendation(question: str):
-    # Simple context (no vector DB needed on cloud)
     context = pricing_df.to_string(index=False)
     return chain.invoke({"context": context, "question": question})

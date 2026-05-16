@@ -8,6 +8,14 @@ st.set_page_config(page_title="Industrial Supplier Pricing", layout="wide")
 st.title("🚀 Industrial Supplier Pricing Engine")
 st.markdown("**Personal AI Portfolio Project 1**")
 
+# Download template button (always visible)
+st.download_button(
+    label="📥 Download Sample Pricing Template",
+    data=pd.read_csv("data/sample_pricing.csv").to_csv(index=False),
+    file_name="pricing_template.csv",
+    mime="text/csv"
+)
+
 # File uploader
 uploaded_file = st.file_uploader("Upload your pricing data (CSV)", type=["csv"])
 if uploaded_file:
@@ -29,7 +37,7 @@ with col2:
                      title="Cost vs Competitor Price")
     st.plotly_chart(fig2, use_container_width=True)
 
-# AI Recommendations
+# AI Section
 st.subheader("Ask AI for Pricing Recommendations")
 question = st.text_area(
     "Your request to the AI:",
@@ -38,40 +46,9 @@ question = st.text_area(
 )
 
 if st.button("Get AI Recommendations", type="primary"):
-    with st.spinner("AI is thinking..."):
+    with st.spinner("AI is analyzing..."):
         response = get_pricing_recommendation(question)
-        
         st.success("✅ AI Recommendation")
         st.markdown(response)
 
-        # === Create Downloadable CSV ===
-        # Parse the AI response into structured data
-        lines = response.split('\n')
-        recommendations = []
-        
-        for line in lines:
-            if any(keyword in line.lower() for keyword in ["price", "suggest", "$"]):
-                recommendations.append({
-                    "Product": "Extracted from AI",
-                    "Recommended_Price": "See AI response",
-                    "Suggested_Margin": "See AI response",
-                    "Reasoning": line.strip(),
-                    "Date": datetime.now().strftime("%m/%d/%Y")
-                })
-
-        if recommendations:
-            download_df = pd.DataFrame(recommendations)
-        else:
-            download_df = pd.DataFrame([{"Note": "See full AI recommendation above", "Date": datetime.now().strftime("%m/%d/%Y")}])
-
-        csv = download_df.to_csv(index=False)
-
-        st.download_button(
-            label="📥 Download Recommendations as CSV",
-            data=csv,
-            file_name=f"pricing_recommendations_{datetime.now().strftime('%Y%m%d_%H%M')}.csv",
-            mime="text/csv",
-            type="primary"
-        )
-
-st.caption("Built with Qwen2.5 14B (local) + Groq (cloud) • Industrial Supplier Pricing Tool")
+st.caption("Industrial Supplier Pricing Tool • Local + Cloud Hybrid")
