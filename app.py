@@ -6,7 +6,7 @@ from datetime import datetime
 
 st.set_page_config(page_title="Industrial Supplier Pricing", layout="wide")
 st.title("🚀 Industrial Supplier Pricing Engine")
-st.markdown("**Industrial Supplier Pricing Engine**")
+st.markdown("**Personal AI Portfolio Project 1**")
 
 # File uploader
 uploaded_file = st.file_uploader("Upload your pricing data (CSV)", type=["csv"])
