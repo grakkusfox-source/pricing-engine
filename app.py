@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from agent import get_pricing_recommendation
+from datetime import datetime
 
 st.set_page_config(page_title="AI Pricing Engine", layout="wide")
 st.title("🚀 AI Pricing Recommendation Engine")
@@ -37,9 +38,17 @@ question = st.text_area(
 )
 
 if st.button("Get AI Recommendations", type="primary"):
-    with st.spinner("AI is analyzing..."):
+    with st.spinner("AI is thinking..."):
         response = get_pricing_recommendation(question)
         st.success("✅ AI Recommendation")
         st.markdown(response)
+        
+        # Create downloadable CSV
+        st.download_button(
+            label="📥 Download Recommendations as CSV",
+            data=response,  # For now it's text - we can improve this later
+            file_name=f"pricing_recommendations_{datetime.now().strftime('%Y%m%d')}.txt",
+            mime="text/plain"
+        )
 
-st.caption("Built locally with Qwen2.5 14B + LangChain + Streamlit")
+st.caption("Built locally with Qwen2.5 14B • Cloud version with Groq")

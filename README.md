@@ -1,26 +1,28 @@
-# AI Pricing Recommendation Engine
-
+### AI Pricing Recommendation Engine
 **Personal AI Portfolio Project 1**
 
-A fully local GenAI-powered pricing optimization tool that analyzes historical sales and pricing data to generate intelligent dynamic pricing recommendations.
+**Overview**  
+Built a full-stack AI application that analyzes historical pricing and sales data to generate intelligent, dynamic pricing recommendations. The tool supports CSV uploads, interactive visualizations, and provides clear business reasoning.
 
-### Key Features
-- Upload your own pricing CSV files
-- Interactive charts (sales volume + cost vs competitor analysis)
-- AI agent with Retrieval-Augmented Generation (RAG)
-- Fully offline — runs 100% locally on Mac Mini
-- Zero ongoing API costs
+**Key Technical Achievements**
+- Implemented Retrieval-Augmented Generation (RAG) using local and cloud LLMs
+- Created responsive Streamlit dashboard with Plotly visualizations
+- Developed hybrid architecture (local Ollama + Groq cloud fallback)
+- Added file upload and export functionality
 
-### Tech Stack
-- **LLM**: Qwen2.5 14B (via Ollama)
-- **Orchestration**: LangChain
-- **Vector Database**: Chroma
-- **Frontend**: Streamlit
-- **Visualizations**: Plotly
+**Quantifiable Outcomes (Simulated)**
+- Reduces manual pricing analysis time by ~70%
+- Identifies opportunities for 8–18% margin improvement
+- Provides auditable, explainable recommendations
 
-### How to Run Locally
+**Tech Stack**
+- Python, LangChain, Streamlit, Plotly
+- Qwen2.5-14B (local) + Groq (cloud)
+- Chroma (local vector store)
 
-```bash
-cd pricing-engine
-source .venv/bin/activate
-streamlit run app.py
+**Live Demo**: [pricing-engine.streamlit.app](https://pricing-engine-lk8x86ys8bjqnujw7grpey.streamlit.app)
+
+**What I Learned**
+- Building production-ready hybrid AI applications
+- Handling local vs cloud LLM differences
+- Creating user-friendly data tools with proper error handling
