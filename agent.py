@@ -3,15 +3,21 @@ from langchain_community.vectorstores import Chroma
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 import pandas as pd
+import os
 
-# Model Setup - Optimized for your Mac Mini M4 16GB
-llm = ChatOllama(
-    model="qwen2.5:14b",
-    temperature=0.3,
-    num_ctx=4096
-)
-
-embeddings = OllamaEmbeddings(model="nomic-embed-text")
+# === Smart Model Selection ===
+if os.getenv("STREAMLIT_SHARING_MODE"):   # Running on Streamlit Cloud
+    from langchain_groq import ChatGroq
+    llm = ChatGroq(
+        model="qwen2.5-14b",           # or "llama3-70b-8192"
+        temperature=0.3,
+        api_key=os.getenv("GROQ_API_KEY")   # We'll set this in Streamlit
+    )
+    embeddings = OllamaEmbeddings(model="nomic-embed-text")  # Keep local embeddings for now
+else:
+    # Local Mac Mini
+    llm = ChatOllama(model="qwen2.5:14b", temperature=0.3, num_ctx=4096)
+    embeddings = OllamaEmbeddings(model="nomic-embed-text")
 
 def load_pricing_data():
     df = pd.read_csv("data/sample_pricing.csv")
