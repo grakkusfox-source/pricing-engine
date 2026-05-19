@@ -50,4 +50,8 @@ chain = prompt | llm | StrOutputParser()
 
 def get_pricing_recommendation(question: str):
     context = pricing_df.to_string(index=False)
+    
+    # Debug line - remove later
+    print("DEBUG: Running on CLOUD =", IS_CLOUD)
+    
     return chain.invoke({"context": context, "question": question})
